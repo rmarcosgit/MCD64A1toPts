@@ -158,7 +158,7 @@ burnedPixelDF <- function(pathIn, clumpDist, ndays){
   # rm(df_stack, acumulado, clumpy, st, qa, unc)
   # colnames(p_incendio) <- c("x","y","clump","day","unc","qa","year","ntail")
   # colnames(p_incendio) <- c("clump","day","unc","qa","x","y","year","ntail")
-
+ print('L-161')
   for (p in 1:nrow(p_incendio)){
     p_incendio$qa_bit0[p] <- unbinary(paste0(as.integer(intToBits(p_incendio$qa[p])[1]),collapse=""))
     p_incendio$qa_bit1[p] <- unbinary(paste0(as.integer(intToBits(p_incendio$qa[p])[2]),collapse=""))
@@ -187,6 +187,7 @@ burnedPixelDF <- function(pathIn, clumpDist, ndays){
   #Initialize clump codes and start assignation
   rownames(p_incendio) = 1:nrow(p_incendio)
   p_incendio$year <- as.numeric(as.character(p_incendio$year))
+  print('L-190')
   id=1
   seguridad <- p_incendio
   for (zzz in unique(p_incendio$year)){
