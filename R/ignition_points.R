@@ -148,7 +148,8 @@ burnedPixelDF <- function(pathIn, clumpDist, ndays){
     df_stack <- as.data.frame(st, xy=T, centroids=T, na.rm=T)
     df_stack$year <- y
     df_stack$ntile <- n
-
+    
+    print(L-152)
     if (!exists('p_incendio')){
       p_incendio<- setNames(data.frame(matrix(ncol = ncol(df_stack), nrow = 0)), colnames(df_stack))
     }
