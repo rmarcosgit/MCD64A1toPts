@@ -145,6 +145,7 @@ burnedPixelDF <- function(pathIn, clumpDist, ndays){
     st<- projectRaster(st, crs = pj1, method = "ngb")
 
     #Convert to data.frame
+    print(L-152)
     df_stack <- as.data.frame(st, xy=T, centroids=T, na.rm=T)
     df_stack$year <- y
     df_stack$ntile <- n
