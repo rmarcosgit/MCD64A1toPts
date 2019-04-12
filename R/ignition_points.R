@@ -13,7 +13,7 @@
 
 #######################################################################################
 #Build burned pixels SPDF
-burnedPixelDF <- function(pathIn, clumpDist){
+burnedPixelDF <- function(pathIn, clumpDist, ndays){
 
   #Path to MODIS images
   f_bd <- paste0(pathIn,'Burn_Date')
@@ -291,7 +291,7 @@ burnedPixelDF <- function(pathIn, clumpDist){
       pos_date2 <- pos_date[1:length(pos_date)-1]
       dif_date <- as.numeric(difftime(pos_date1, pos_date2 , units = c("days")))
       ####
-      cut_t <- which(dif_date>= 3)
+      cut_t <- which(dif_date>= ndays)
       ####
       if(length(cut_t)==0){
         df_stack$clump3[df_stack$clump2 == c] <- num_clump

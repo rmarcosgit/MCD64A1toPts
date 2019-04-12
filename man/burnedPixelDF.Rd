@@ -13,7 +13,8 @@ burnedPixelDF(x,clumpDist)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{a string value representing the path were subfolders Burn_Date/, Burn_Date_Unc/ and QA/ are located.}
-  \item{clumpDist}{a numeric value with the distance threshold (in meters) from which a burned pixels is considered an individual fire event.}
+  \item{clumpDist}{a numeric value with the distance threshold (in meters) afar from which a burned pixels is considered an individual fire event.}
+  \item{nDays}{a numeric value with the temporal threshold (in days) from which a burned pixels is considered an individual fire event.}
 %%     ~~Describe \code{x} here~~
 }
 \details{
