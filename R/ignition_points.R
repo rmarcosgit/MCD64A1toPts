@@ -40,7 +40,7 @@ burnedPixelDF <- function(pathIn, clumpDist, ndays){
   rule_reclas <-  c(-Inf, 0, NA, 400, Inf, NA)
   rule_reclas2 <-  c(1, Inf, 1)
   m <- c(0, 100, 1,  101, 200, 2,  201, 300, 3)
-  rm(p_incendio)
+  #rm(p_incendio)
   
   #Looping through years
   for (y in year){
