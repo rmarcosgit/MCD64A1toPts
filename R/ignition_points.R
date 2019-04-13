@@ -146,7 +146,7 @@ burnedPixelDF <- function(pathIn, clumpDist, ndays){
     
     #Convert to data.frame
     print('L-152')
-    df_stack <- as.data.frame(st, xy=T, centroids=T, na.rm=T)
+    df_stack <- raster::as.data.frame(st, xy=T, centroids=T, na.rm=T)
     df_stack$year <- y
     df_stack$ntile <- n
     
