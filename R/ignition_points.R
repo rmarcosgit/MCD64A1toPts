@@ -40,7 +40,7 @@ burnedPixelDF <- function(pathIn, clumpDist, ndays){
   rule_reclas <-  c(-Inf, 0, NA, 400, Inf, NA)
   rule_reclas2 <-  c(1, Inf, 1)
   m <- c(0, 100, 1,  101, 200, 2,  201, 300, 3)
-  #rm(p_incendio)
+  rm(p_incendio)
   
   #Looping through years
   for (y in year){
@@ -145,10 +145,12 @@ burnedPixelDF <- function(pathIn, clumpDist, ndays){
     st<- projectRaster(st, crs = pj1, method = "ngb")
     
     #Convert to data.frame
+    print('L-152')
     df_stack <- as.data.frame(st, xy=T, centroids=T, na.rm=T)
     df_stack$year <- y
     df_stack$ntile <- n
     
+    print('L-152')
     if (!exists('p_incendio')){
       p_incendio<- setNames(data.frame(matrix(ncol = ncol(df_stack), nrow = 0)), colnames(df_stack))
     }
@@ -158,7 +160,7 @@ burnedPixelDF <- function(pathIn, clumpDist, ndays){
   # rm(df_stack, acumulado, clumpy, st, qa, unc)
   # colnames(p_incendio) <- c("x","y","clump","day","unc","qa","year","ntail")
   # colnames(p_incendio) <- c("clump","day","unc","qa","x","y","year","ntail")
-
+  print('L-161')
   for (p in 1:nrow(p_incendio)){
     p_incendio$qa_bit0[p] <- unbinary(paste0(as.integer(intToBits(p_incendio$qa[p])[1]),collapse=""))
     p_incendio$qa_bit1[p] <- unbinary(paste0(as.integer(intToBits(p_incendio$qa[p])[2]),collapse=""))
@@ -187,6 +189,7 @@ burnedPixelDF <- function(pathIn, clumpDist, ndays){
   #Initialize clump codes and start assignation
   rownames(p_incendio) = 1:nrow(p_incendio)
   p_incendio$year <- as.numeric(as.character(p_incendio$year))
+  print('L-190')
   id=1
   seguridad <- p_incendio
   for (zzz in unique(p_incendio$year)){
