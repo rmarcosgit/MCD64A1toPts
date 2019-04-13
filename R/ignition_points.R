@@ -14,7 +14,7 @@
 #######################################################################################
 #Build burned pixels SPDF
 burnedPixelDF <- function(pathIn, clumpDist, ndays){
-
+  
   #Path to MODIS images
   f_bd <- paste0(pathIn,'Burn_Date')
   f_bdu <- paste0(pathIn,'Burn_Date_Unc')
@@ -23,7 +23,7 @@ burnedPixelDF <- function(pathIn, clumpDist, ndays){
   name <- basename(files_bd)
   files_unc <- list.files(f_bdu,pattern='.tif$',full.names=TRUE)
   files_qa <- list.files(f_qa,pattern='.tif$',full.names=TRUE)
-
+  
   #Check files
   if (length(files_bd) == length(files_unc) & length(files_bd) == length(files_qa)){
     print(".TIF Okay")
@@ -31,17 +31,17 @@ burnedPixelDF <- function(pathIn, clumpDist, ndays){
     print("Error reading .TIF")
     break()
   }
-
+  
   #Select years and tails
   year <- unique(substr(name, 19, 22))
   n <- 0
-
+  
   #Rules for reclassify data
   rule_reclas <-  c(-Inf, 0, NA, 400, Inf, NA)
   rule_reclas2 <-  c(1, Inf, 1)
   m <- c(0, 100, 1,  101, 200, 2,  201, 300, 3)
   rm(p_incendio)
-
+  
   #Looping through years
   for (y in year){
     print(y)
@@ -56,14 +56,14 @@ burnedPixelDF <- function(pathIn, clumpDist, ndays){
       #Accumulated raster layers of burn data, uncertanigy and QA
       assign(name_raster_bd, raster(lista_acum[i]))
       assign(name_raster_bd, reclassify(get(name_raster_bd), matrix(rule_reclas, ncol=3, byrow = TRUE)))
-
+      
       name_raster_qa <- paste("raster_qa", i, sep="")
       assign(name_raster_qa, raster(lista_qa[i]))
       name_raster_bd_qa <- paste("raster_bd_qa", i, sep="")
       assign(name_raster_bd_qa, reclassify(get(name_raster_bd), matrix(rule_reclas2, ncol=3, byrow = TRUE)))
       assign(name_raster_qa, get(name_raster_qa)*get(name_raster_bd_qa))
     }
-
+    
     if (length(lista_acum)==12){st_bd<- stack(raster_bd1,raster_bd2,raster_bd3,raster_bd4,raster_bd5,raster_bd6,raster_bd7,raster_bd8,raster_bd9,raster_bd10,raster_bd11,raster_bd12)
     } else if (length(lista_acum)==11)  {st_bd<- stack(raster_bd1,raster_bd2,raster_bd3,raster_bd4,raster_bd5,raster_bd6,raster_bd7,raster_bd8,raster_bd9,raster_bd10,raster_bd11)
     } else if (length(lista_acum)==10)  {st_bd<- stack(raster_bd1,raster_bd2,raster_bd3,raster_bd4,raster_bd5,raster_bd6,raster_bd7,raster_bd8,raster_bd9,raster_bd10)
@@ -79,12 +79,12 @@ burnedPixelDF <- function(pathIn, clumpDist, ndays){
     st_bd[is.na(st_bd)] <- 0
     acumulado<- max(st_bd)
     acumulado[acumulado==0] <- NA
-
+    
     #Deleting temporal file
     # rm(raster_bd1,raster_bd2,raster_bd3,raster_bd4,raster_bd5,raster_bd6,raster_bd7,raster_bd8,raster_bd9,raster_bd10,raster_bd11,raster_bd12, st_bd)
     # rm(raster_bd_qa1,raster_bd_qa2,raster_bd_qa3,raster_bd_qa4,raster_bd_qa5,raster_bd_qa6,raster_bd_qa7,raster_bd_qa8,raster_bd_qa9,raster_bd_qa10,raster_bd_qa11,raster_bd_qa12, st_bd)
     # gc()
-
+    
     #QA
     if (length(lista_acum)==12){st_qa<- stack(raster_qa1,raster_qa2,raster_qa3,raster_qa4,raster_qa5,raster_qa6,raster_qa7,raster_qa8,raster_qa9,raster_qa10,raster_qa11,raster_qa12)
     } else if (length(lista_acum)==11)  {st_qa<- stack(raster_qa1,raster_qa2,raster_qa3,raster_qa4,raster_qa5,raster_qa6,raster_qa7,raster_qa8,raster_qa9,raster_qa10,raster_qa11)
@@ -105,14 +105,14 @@ burnedPixelDF <- function(pathIn, clumpDist, ndays){
     # writeRaster(qa, paste0(pathIn,"/",n,"_",y,"_qa.tif"), format = "GTiff", overwrite=T)
     # rm(raster_qa1,raster_qa2,raster_qa3,raster_qa4,raster_qa5,raster_qa6,raster_qa7,raster_qa8,raster_qa9,raster_qa10,raster_qa11,raster_qa12, st_qa)
     # gc()
-
+    
     #Uncerainty cumulative layer
     for (i in 1:length(lista_unc)){
       name_raster_unc <- paste("raster_unc", i, sep="")
-
+      
       assign(name_raster_unc, raster(lista_unc[i]))
     }
-
+    
     if (length(lista_acum)==12){st_unc<- stack(raster_unc1,raster_unc2,raster_unc3,raster_unc4,raster_unc5,raster_unc6,raster_unc7,raster_unc8,raster_unc9,raster_unc10,raster_unc11,raster_unc12)
     } else if (length(lista_acum)==11)  {st_unc<- stack(raster_unc1,raster_unc2,raster_unc3,raster_unc4,raster_unc5,raster_unc6,raster_unc7,raster_unc8,raster_unc9,raster_unc10,raster_unc11)
     } else if (length(lista_acum)==10)  {st_unc<- stack(raster_unc1,raster_unc2,raster_unc3,raster_unc4,raster_unc5,raster_unc6,raster_unc7,raster_unc8,raster_unc9,raster_unc10)
@@ -132,25 +132,23 @@ burnedPixelDF <- function(pathIn, clumpDist, ndays){
     # writeRaster(unc, paste0(pathIn,"/",n,"_",y,"_unc.tif"), format = "GTiff", overwrite=T)
     # rm(raster_unc1,raster_unc2,raster_unc3,raster_unc4,raster_unc5,raster_unc6,raster_unc7,raster_unc8,raster_unc9,raster_unc10,raster_unc11,raster_unc12, st_unc)
     # gc()
-
+    
     #Eliminar
     removeTmpFiles(1)
     print('-------Clump1-----')
     #Firts grouping attempt
     clumpy <- clump(acumulado, directions=8)
-
+    
     st<- stack(clumpy, acumulado, unc, qa)
     #Project to WGS84
     pj1 <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
     st<- projectRaster(st, crs = pj1, method = "ngb")
-
+    
     #Convert to data.frame
-    print(L-152)
     df_stack <- as.data.frame(st, xy=T, centroids=T, na.rm=T)
     df_stack$year <- y
     df_stack$ntile <- n
     
-    print(L-152)
     if (!exists('p_incendio')){
       p_incendio<- setNames(data.frame(matrix(ncol = ncol(df_stack), nrow = 0)), colnames(df_stack))
     }
@@ -160,7 +158,7 @@ burnedPixelDF <- function(pathIn, clumpDist, ndays){
   # rm(df_stack, acumulado, clumpy, st, qa, unc)
   # colnames(p_incendio) <- c("x","y","clump","day","unc","qa","year","ntail")
   # colnames(p_incendio) <- c("clump","day","unc","qa","x","y","year","ntail")
- print('L-161')
+
   for (p in 1:nrow(p_incendio)){
     p_incendio$qa_bit0[p] <- unbinary(paste0(as.integer(intToBits(p_incendio$qa[p])[1]),collapse=""))
     p_incendio$qa_bit1[p] <- unbinary(paste0(as.integer(intToBits(p_incendio$qa[p])[2]),collapse=""))
@@ -185,11 +183,10 @@ burnedPixelDF <- function(pathIn, clumpDist, ndays){
   # length(which(p_incendio$qa_bit5!=0))
   # length(which(p_incendio$qa_bit6!=0))
   # length(which(p_incendio$qa_bit7!=0))
-
+  
   #Initialize clump codes and start assignation
   rownames(p_incendio) = 1:nrow(p_incendio)
   p_incendio$year <- as.numeric(as.character(p_incendio$year))
-  print('L-190')
   id=1
   seguridad <- p_incendio
   for (zzz in unique(p_incendio$year)){
@@ -201,18 +198,19 @@ burnedPixelDF <- function(pathIn, clumpDist, ndays){
     }
   }
   ###############################################################################################
-
+  
   df_stack <- p_incendio
-
+  names(df_stack)[4:6] <- c('day','unc','qa')
+  
   #Check remaing QA issues
   nrow(subset(df_stack,df_stack$qa_bit0!=1 | df_stack$qa_bit1!=1 | df_stack$qa_bit2!=0 | df_stack$qa_bit3!=0))
-
+  
   df_stack$year <- as.numeric(as.character(df_stack$year))
   df_stack$date <- as.Date(as.vector(df_stack$day-1), origin = paste0(df_stack$year,"-01-01"))
   df_stack_shp <- SpatialPointsDataFrame(df_stack[c("x","y")], df_stack)
   crs(df_stack_shp) <-  "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +to wgs84=0,0,0"
   # writeOGR(obj=df_stack_shp, dsn=paste0(f_shp), layer="df_stack", driver="ESRI Shapefile")
-
+  
   #######################################################Clump2#######################################################
   # Second clump, refining the first
   print('-------Clump2-----')
@@ -228,9 +226,9 @@ burnedPixelDF <- function(pathIn, clumpDist, ndays){
       temporal_clump <- mean(subset_clump$clump2)
     }
     buffer_clump <- buffer(subset_clump, width=clumpDist, dissolve=T)
-
+    
     intersect_clump <- df_stack_shp[buffer_clump, ]
-
+    
     clump_intersect <- unique(intersect_clump$clump)
     clump_intersect <-  clump_intersect[clump_intersect!= c & clump_intersect!=0]
     if(length(clump_intersect)>0){
@@ -248,34 +246,34 @@ burnedPixelDF <- function(pathIn, clumpDist, ndays){
     } else {num_clump <- num_clump+1}
   }
   # rm(tr_int, num_clump)
-
+  
   ###########################################################################################################
   df_stack <- as.data.frame(df_stack_shp)[1:18]
-
+  
   #Third clump attemp. Dis/aggregate accordign to temporal window
   ##################################################################
   print('-------Clump3-----')
   df_stack$clump3 <- 0
   num_clump <- 1
   for (c in unique(df_stack$clump2)){
-
+    
     df_clump <- subset(df_stack, df_stack$clump2==c)
-
+    
     if (nrow(df_clump)==0){
       print("no incendio en clump")
       next
     }
     #Get unique dates
     pos_day <- unique(df_clump$date)
-
+    
     if (length(pos_day)>1){
-
+      
       pos_date2 <- c()
-
+      
       #Clump according to date plus uncertainty
-
+      
       for (n in 1:nrow(df_clump)){
-
+        
         if (df_clump$unc[n]>1){
           pos_date1 <- c()
           for (n_unc in 1:df_clump$unc[n]){
@@ -300,17 +298,17 @@ burnedPixelDF <- function(pathIn, clumpDist, ndays){
         df_stack$clump3[df_stack$clump2 == c] <- num_clump
         num_clump = num_clump+1
       }
-
+      
       #If there are different dates then...
       if(length(cut_t)>0){
         #We assign a new clump code
         for (d_cut in 0:length(cut_t)){
-
+          
           if (d_cut == 0){
             ind_date <- pos_date[1:cut_t[1]]
             df_stack$clump3[df_stack$clump2 == c & df_stack$date %in% ind_date] <- num_clump
             num_clump = num_clump+1
-
+            
           } else if (d_cut != 0 & d_cut != length(cut_t)){
             ind_date <- pos_date[(cut_t[d_cut]+1):(cut_t[d_cut+1])]
             df_stack$clump3[df_stack$clump2 == c & df_stack$date %in% ind_date] <- num_clump
@@ -323,7 +321,7 @@ burnedPixelDF <- function(pathIn, clumpDist, ndays){
           }
         }
       }
-
+      
     } else {
       df_stack$clump3[df_stack$clump2 == c] <- num_clump
       num_clump = num_clump+1
@@ -333,12 +331,12 @@ burnedPixelDF <- function(pathIn, clumpDist, ndays){
   df_stack_shp <- SpatialPointsDataFrame(df_stack[c("x","y")], df_stack)
   crs(df_stack_shp) <-  "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +to wgs84=0,0,0"
   # writeOGR(obj=df_stack_shp, dsn=paste0(f_shp), layer="df_stack_clump3", driver="ESRI Shapefile")
-
-
+  
+  
   #######################################################Clump4#######################################################
   df_stack_shp$id <- seq.int(nrow(df_stack_shp))
   crs(df_stack_shp) <-  "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +to wgs84=0,0,0"
-
+  
   print('-------Clump4-----')
   df_stack_shp$clump4 = 0
   num_clump <- 1
@@ -358,7 +356,7 @@ burnedPixelDF <- function(pathIn, clumpDist, ndays){
         n_points <- nrow(intersect_clump)
         buffer_clump <- buffer(intersect_clump, width=1500, dissolve=T)
         intersect_clump <- subset_clump[buffer_clump, ]
-                if (n_points == nrow(intersect_clump)){n_points = 0}
+        if (n_points == nrow(intersect_clump)){n_points = 0}
       }
       df_stack_shp$clump4[df_stack_shp$id %in% intersect_clump$id] <- num_clump
       subset_clump <- subset_clump[!subset_clump$id %in% intersect_clump$id, ]
@@ -369,27 +367,6 @@ burnedPixelDF <- function(pathIn, clumpDist, ndays){
   # writeOGR(obj=df_stack_shp, dsn="E:/MODIS/df_stack_CA.shp", layer="E:/MODIS/df_stack_CA.shp", driver="ESRI Shapefile")
   df_stack <- as.data.frame(df_stack_shp)[1:21]
   return(df_stack)
-}
-
-# prueba <- burnedPixelDF('E:/MODIS/',1500)
-
-###########################################################################################################
-#Count fire recurrence, i.e, how many times a pixel was burnt
-burnRec <- function(df_stack){
-  df_stack$recurr <- 1
-  ind_recurr <- df_stack[duplicated(df_stack[,c('x','y')]) | duplicated(df_stack[,c('x','y')], fromLast=TRUE),]
-  for (n in ind_recurr$id){
-    x_r <-  df_stack$x[df_stack$id == n]
-    y_r <-  df_stack$y[df_stack$id == n]
-    subset_xy <- subset(df_stack, df_stack$x == x_r & df_stack$y == y_r)
-    recurrencia <- nrow(subset_xy)
-    df_stack$recurr[df_stack$x == x_r & df_stack$y == y_r & df_stack$recurr == 1] <- recurrencia
-  }
-  df_stack_shp <- SpatialPointsDataFrame(df_stack[c("x","y")], df_stack)
-  crs(df_stack_shp) <-  "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +to wgs84=0,0,0"
-  return(df_stack_shp)
-  # writeOGR(obj=df_stack_shp, dsn="df_stack_recurr", layer="df_stack_recurr", driver="ESRI Shapefile")
-
 }
 
 # prueba_rec <- burnRec(prueba)
