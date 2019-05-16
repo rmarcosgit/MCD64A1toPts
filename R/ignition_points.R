@@ -152,6 +152,9 @@ burnedPixelDF <- function(pathIn, clumpDist = 1500, ndays = 3, pSMP = TRUE, pCR 
     df_stack <- raster::as.data.frame(st, xy=T, centroids=T, na.rm=T)
     df_stack$year <- y
     
+    #Added to solve naming issue
+    colnames(df_stack) <- c("x","y","clump","day","unc","qa","year")
+    
     if (!exists('p_incendio')){
       p_incendio<- setNames(data.frame(matrix(ncol = ncol(df_stack), nrow = 0)), colnames(df_stack))
     }
