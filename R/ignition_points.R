@@ -171,7 +171,11 @@ burnedPixelDF <- function(pathIn, clumpDist = 1500, ndays = 3, pSMP = TRUE, pCR 
   # rm(df_stack, acumulado, clumpy, st, qa, unc)
   colnames(p_incendio) <- c("x","y","clump","day","unc","qa","year")
   # colnames(p_incendio) <- c("clump","day","unc","qa","x","y","year","ntail")
+  
   print('L-161')
+  
+  p_incendio$qa <- as.integer(p_incendio$qa)
+  
   p_incendio$qa_bit0 <- sapply(p_incendio$qa,  function(x) extract_bit(x, bitnum=1))
   p_incendio$qa_bit1 <- sapply(p_incendio$qa,  function(x) extract_bit(x, bitnum=2))
   p_incendio$qa_bit2 <- sapply(p_incendio$qa,  function(x) extract_bit(x, bitnum=3))
@@ -348,7 +352,7 @@ burnedPixelDF <- function(pathIn, clumpDist = 1500, ndays = 3, pSMP = TRUE, pCR 
   ###Last clump
   for (c in unique(df_stack_shp$clump3)){
     # print(paste0(contador,"/", length(unique(df_stack_shp$clump3))))
-    contador = contador + 1
+    # contador = contador + 1
     subset_clump <- subset(df_stack_shp, df_stack_shp$clump3==c)
     if (nrow(subset_clump)==0){next}
     while (nrow(subset_clump)>0) {
