@@ -83,8 +83,8 @@ burnedPixelDF <- function(pathIn, clumpDist = 1500, ndays = 3, pSMP = TRUE, pCR 
     } else if (length(lista_acum)==3)  {st_bd<- stack(raster_bd1,raster_bd2,raster_bd3)
     } else if (length(lista_acum)==2)  {st_bd<- stack(raster_bd1,raster_bd2)
     } else if (length(lista_acum)==1)  {st_bd<- raster_bd1}
-    st_bd[is.na(st_bd)] <- 0
-    acumulado<- max(st_bd)
+    #st_bd[is.na(st_bd)] <- 0
+    acumulado<- max(st_bd,na.rm=T)
     acumulado[acumulado==0] <- NA
     
     #Deleting temporal file
@@ -105,8 +105,8 @@ burnedPixelDF <- function(pathIn, clumpDist = 1500, ndays = 3, pSMP = TRUE, pCR 
     } else if (length(lista_acum)==3)  {st_qa<- stack(raster_qa1,raster_qa2,raster_qa3)
     } else if (length(lista_acum)==2)  {st_qa<- stack(raster_qa1,raster_qa2)
     } else if (length(lista_acum)==1)  {st_qa<- raster_qa1}
-    st_qa[is.na(st_qa)] <- 0
-    st_qa <- max(st_qa)
+    #st_qa[is.na(st_qa)] <- 0
+    st_qa <- max(st_qa,na.rm=T)
     st_qa[st_qa==0] <- NA
     qa <- st_qa
     # rm(raster_qa1,raster_qa2,raster_qa3,raster_qa4,raster_qa5,raster_qa6,raster_qa7,raster_qa8,raster_qa9,raster_qa10,raster_qa11,raster_qa12, st_qa)
@@ -130,8 +130,8 @@ burnedPixelDF <- function(pathIn, clumpDist = 1500, ndays = 3, pSMP = TRUE, pCR 
     } else if (length(lista_acum)==3)  {st_unc<- stack(raster_unc1,raster_unc2,raster_unc3)
     } else if (length(lista_acum)==2)  {st_unc<- stack(raster_unc1,raster_unc2)
     } else if (length(lista_acum)==1)  {st_unc<- raster_unc1}
-    st_unc[is.na(st_unc)] <- 0
-    st_unc <- max(st_unc)
+    #st_unc[is.na(st_unc)] <- 0
+    st_unc <- max(st_unc,na.rm=T)
     st_unc[st_unc==0] <- NA
     unc <- st_unc
     # rm(raster_unc1,raster_unc2,raster_unc3,raster_unc4,raster_unc5,raster_unc6,raster_unc7,raster_unc8,raster_unc9,raster_unc10,raster_unc11,raster_unc12, st_unc)
