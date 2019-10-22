@@ -903,3 +903,21 @@ buildPerimeters <- function(pts.df){
   perimeters.layer <- do.call(rbind,perimeters)
   return(perimeters.layer)
 }
+
+#Calculate fire recurrence
+burnRec <- function(df_stack){
+  df_stack$recurr <- 1
+  ind_recurr <- df_stack[duplicated(df_stack[,c('x','y')]) | duplicated(df_stack[,c('x','y')], fromLast=TRUE),]
+  for (n in ind_recurr$id){
+    x_r <-  df_stack$x[df_stack$id == n]
+    y_r <-  df_stack$y[df_stack$id == n]
+    subset_xy <- subset(df_stack, df_stack$x == x_r & df_stack$y == y_r)
+    recurrencia <- nrow(subset_xy)
+    df_stack$recurr[df_stack$x == x_r & df_stack$y == y_r & df_stack$recurr == 1] <- recurrencia
+  }
+  df_stack_shp <- SpatialPointsDataFrame(df_stack[c("x","y")], df_stack)
+  crs(df_stack_shp) <-  "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +to wgs84=0,0,0"
+  return(df_stack_shp)
+  # writeOGR(obj=df_stack_shp, dsn="df_stack_recurr", layer="df_stack_recurr", driver="ESRI Shapefile")
+  
+}
