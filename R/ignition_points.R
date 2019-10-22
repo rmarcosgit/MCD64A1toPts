@@ -129,7 +129,7 @@ burnedPixelDF <- function(pathIn){
     st<- projectRaster(st, crs = pj1, method = "ngb")
     #Seleccionar el a?o de la imagen. El dia de la imagena actual y el dia de la siguiente imagen.
     #Convertir r?ster a data.frame de valores y coordenadas. Se eliminan los valores no data. Cambiar el nombre de las columnas.
-    df_stack <- as.data.frame(st, xy=T, centroids=T, na.rm=T)
+    df_stack <- raster::as.data.frame(st, xy=T, centroids=T, na.rm=T)
     # df_stack <- cbind(df_stack, y, n)
     df_stack$year <- y
     df_stack$ntile <- n
